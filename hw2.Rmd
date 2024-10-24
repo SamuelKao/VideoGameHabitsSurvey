@@ -5,55 +5,121 @@ date: "2024-10-21"
 ---
 
 ```{r}
-#read data
-videodata <- read.table("videodata.txt",header =TRUE)
-videodata
+# read data
+videodata <- read.table("videodata.txt", header = TRUE)
+head(videodata)
 ```
 
 ```{r}
-#read data
-videoMultiple <- read.table("videoMultiple.txt",header = TRUE)
+# read data
+videoMultiple <- read.table("videoMultiple.txt", header = TRUE)
 videoMultiple
 ```
 
 1. 
 ```{r}
-#find the point estimator
-point_estimate_fraction <- sum(videodata$time >0) / length(videodata$time)
+# find the point estimator
+point_estimate_fraction <- sum(videodata$time > 0) / length(videodata$time)
+point_estimate_fraction
 
 confidence_level <- 0.95
-z <- qnorm((confidence_level+1)/2)
+z <- qnorm((confidence_level + 1) / 2)
 
-#find proportion standard error
-se <- sqrt(point_estimate_fraction * (1-point_estimate_fraction)) / sqrt(length(videodata))
+# find proportion standard error
+se <- sqrt(point_estimate_fraction * (1 - point_estimate_fraction)) / sqrt(length(videodata))
 
-#find lower and upper confidence interval
+# find lower and upper confidence interval
 lower_interval_estimate_fraction <- point_estimate_fraction - 2 * se
 lower_interval_estimate_fraction
 
-higher_interval_estimate_fraction <- point_estimate_fraction + 2*se
+higher_interval_estimate_fraction <- point_estimate_fraction + 2 * se
 higher_interval_estimate_fraction
 ```
 37.4% of people play video game in the week prior to the survey.
 
+2. 
+```{r}
+# Filter out rows
+videodata_clean <- videodata[!is.na(videodata$freq) & videodata$freq != 99, ]
+
+avg_time <- tapply(videodata_clean$time, videodata_clean$freq, mean, na.rm = TRUE)
+sd_time <- tapply(videodata_clean$time, videodata_clean$freq, sd, na.rm = TRUE)
+count <- table(videodata_clean$freq)
+
+# summary statistics
+summary_stats <- data.frame(
+    freq = names(avg_time),
+    avg_time = as.numeric(avg_time),
+    sd_time = as.numeric(sd_time),
+    count = as.numeric(count)
+)
+
+print(summary_stats)
+
+# Barplot of average time spent per frequency category
+barplot(summary_stats$avg_time,
+    names.arg = summary_stats$freq,
+    main = "Average Time Spent by Reported Frequency",
+    xlab = "Reported Frequency of Play",
+    ylab = "Average Time Spent (hours)",
+    ylim = c(0, max(summary_stats$avg_time, na.rm = TRUE) + 2)
+)
+```
+```{r}
+# Boxplot of time spent by frequency category
+boxplot(time ~ freq,
+    data = videodata_clean,
+    main = "Time Spent Playing Video Games by Reported Frequency",
+    xlab = "Reported Frequency of Play",
+    ylab = "Time Spent (hours)"
+)
+```
+The average time spent by students who reported playing daily was approximately 4.44 hours for the week. This translates to less than 1 hour per day on average, which is low given their self-categorization.
+
+This suggests that the frequency of daily gaming sessions might be short, which may be due to casual gamers (given the dataset was created in 1994, mobile gaming can be reasonably ignored).
+The high standard deviation (5.57) implies significant variability, with some daily players playing much longer than others, indicating the presence of outliers or different interpretations of what "daily play" means.
+
+Students who reported playing weekly spent an average of 2.54 hours in the prior week. The standard deviation is also quite high (5.50), indicating a wide range of weekly playtime. The variability could be due to students engaging in longer gaming sessions occasionally but not consistently.
+
+Notably, there are pretty significant outliers in both categories, with the most extreme being a 30 hour playtime for someone in the weekly categorization.
+
+Monthly and Semesterly Players: The averages for these groups are extremely low.
+
+Monthly: 0.056 hours 
+
+Semesterly: 0.043 hours
+
+These figures suggest minimal engagement with video games, aligning with their infrequent gaming habits.
+
+The survey was conducted following a week that included exams, which likely influenced the reported and actual gaming behaviors.
+
+Reduced Gaming Time: An exam week would lead to students to allocate more time to studying. This would likely result in a temporary decrease in gaming time, especially for those who usually play more frequently.
+
+This could explain the low average gaming hours for the "Daily" category, where students, despite reporting daily gaming habits, might have significantly shortened their gaming time during exams.
+The exam effect may have impacted the accuracy of the Weekly group as well, reducing the typical number of hours they would have played in a regular week without exams.
+Skewed Estimates: The data collected during an atypical exam week might not accurately represent students' normal gaming habits. The extreme outliers may stand out due to average gaming time decreasing. (eg. a few students didn't have exams or didn't care)
+
+Point Estimate Impact: The point estimate for the proportion of students who played video games during the week might be lower than usual due to the reduced engagement during exams.
+
+Confidence Intervals: The confidence intervals calculated in Question 1 may be biased downward, as the variability in playtime could be different in a regular week. The exam week’s reduction in gaming likely compressed the range of playtimes, affecting standard error calculations.
 
 3. 
 ```{r}
-#find the point estimator
+# find the point estimator
 point_estimate_average <- mean(videodata$time)
 
 confidence_leve <- 0.95
-z <- qnorm((1+confidence_level)/2)
+z <- qnorm((1 + confidence_level) / 2)
 
-#get the variance of data
-variance <- 1/length(videodata$time) * sum((videodata$time - point_estimate_average)**2)
+# get the variance of data
+variance <- 1 / length(videodata$time) * sum((videodata$time - point_estimate_average)**2)
 
-#find average standard error
-se <- sqrt(variance) / sqrt (length(videodata$time))
+# find average standard error
+se <- sqrt(variance) / sqrt(length(videodata$time))
 
-#lower and upper 95% confidence interval
-lower_interval_estimate_average <- point_estimate_average - 2*se
-higher_interval_estimate_average <- point_estimate_average + 2*se
+# lower and upper 95% confidence interval
+lower_interval_estimate_average <- point_estimate_average - 2 * se
+higher_interval_estimate_average <- point_estimate_average + 2 * se
 
 lower_interval_estimate_average
 higher_interval_estimate_average
