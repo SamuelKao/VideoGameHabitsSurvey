@@ -5,37 +5,38 @@ date: "2024-10-21"
 ---
 
 ```{r}
-# read data
-videodata <- read.table("videodata.txt", header = TRUE)
-head(videodata)
+#read data
+videodata <- read.table("videodata.txt",header =TRUE)
+
+videodata
 ```
 
 ```{r}
-# read data
-videoMultiple <- read.table("videoMultiple.txt", header = TRUE)
+#read data
+videoMultiple <- read.table("videoMultiple.txt",header = TRUE)
 videoMultiple
 ```
 
 1. 
 ```{r}
-# find the point estimator
-point_estimate_fraction <- sum(videodata$time > 0) / length(videodata$time)
-point_estimate_fraction
+#find the point estimator
+point_estimate_fraction <- sum(videodata$time >0) / length(videodata$time)
 
 confidence_level <- 0.95
-z <- qnorm((confidence_level + 1) / 2)
+z <- qnorm((confidence_level+1)/2)
 
-# find proportion standard error
-se <- sqrt(point_estimate_fraction * (1 - point_estimate_fraction)) / sqrt(length(videodata))
+#find proportion standard error
+se <- sqrt(point_estimate_fraction * (1-point_estimate_fraction)) / sqrt(length(videodata))
 
-# find lower and upper confidence interval
+#find lower and upper confidence interval
 lower_interval_estimate_fraction <- point_estimate_fraction - 2 * se
 lower_interval_estimate_fraction
 
-higher_interval_estimate_fraction <- point_estimate_fraction + 2 * se
+higher_interval_estimate_fraction <- point_estimate_fraction + 2*se
 higher_interval_estimate_fraction
 ```
-37.4% of people play video game in the week prior to the survey.
+37.4% of people play video game in the week prior to the survey. 
+
 
 2. 
 ```{r}
@@ -103,29 +104,40 @@ Point Estimate Impact: The point estimate for the proportion of students who pla
 
 Confidence Intervals: The confidence intervals calculated in Question 1 may be biased downward, as the variability in playtime could be different in a regular week. The exam week’s reduction in gaming likely compressed the range of playtimes, affecting standard error calculations.
 
+
+
 3. 
 ```{r}
-# find the point estimator
+#find the point estimator
 point_estimate_average <- mean(videodata$time)
 
 confidence_leve <- 0.95
-z <- qnorm((1 + confidence_level) / 2)
+z <- qnorm((1+confidence_level)/2)
 
-# get the variance of data
-variance <- 1 / length(videodata$time) * sum((videodata$time - point_estimate_average)**2)
+#get the variance of data
+variance <- 1/length(videodata$time) * sum((videodata$time - point_estimate_average)**2)
 
-# find average standard error
-se <- sqrt(variance) / sqrt(length(videodata$time))
+#find average standard error
+se <- sqrt(variance) / sqrt (length(videodata$time))
 
-# lower and upper 95% confidence interval
-lower_interval_estimate_average <- point_estimate_average - 2 * se
-higher_interval_estimate_average <- point_estimate_average + 2 * se
+#lower and upper 95% confidence interval
+lower_interval_estimate_average <- point_estimate_average - 2*se
+higher_interval_estimate_average <- point_estimate_average + 2*se
 
 lower_interval_estimate_average
 higher_interval_estimate_average
 ```
+
+
+4.
+```{r}
+reasons_for_likeliness = "Some students may play for social connection, as online multiplayer games allow them to build and maintain friendships. Others might appreciate the creativity that games offer, allowing them to explore virtual worlds, customize characters, or engage in storytelling. Escapism is also a key motivator, as video games provide an immersive experience that can offer a break from everyday stress.
+On the flip side, students who dislike gaming might concerns about its impact on physical health, like eye strain or a sedentary lifestyle. Others might feel that games lack a real-life purpose, seeing them as a distraction from more meaningful activities or accomplishments. Addictive behavior is another reason students might dislike games, fearing they could lose control over the time spent gaming. Lastly, some might experience difficulty learning controls, which can make games less enjoyable, especially for casual players. "
+```
+5.
 ```{r}
 
 ```
 
 
+6. 
