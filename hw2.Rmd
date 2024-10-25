@@ -3,13 +3,19 @@ title: "hw2"
 output: pdf_document
 date: "2024-10-21"
 ---
+# 1. Introduction
+The purpose of the survey conducted at the University of California, Berkeley, was to gain a deeper understanding of the gaming habits and preferences of students enrolled in statistics courses during the Fall 1994 semester. By targeting a specific cohort of 314 eligible students from Statistics 2, Section 1, the researchers aimed to gather data on how frequently these students engaged in video gaming and their likes and dislikes related to the activity.
 
+# 2. Analysis
 ```{r}
 #read data
 videodata <- read.table("videodata.txt",header =TRUE)
-
 videodata
+
 ```
+
+
+
 
 ```{r}
 #read data
@@ -18,6 +24,8 @@ videoMultiple
 ```
 
 1. 
+### Method
+
 ```{r}
 #find the point estimator
 point_estimate_fraction <- sum(videodata$time >0) / length(videodata$time)
@@ -34,8 +42,20 @@ lower_interval_estimate_fraction
 
 higher_interval_estimate_fraction <- point_estimate_fraction + 2*se
 higher_interval_estimate_fraction
+se
 ```
-37.4% of people play video game in the week prior to the survey. 
+### Analysis
+We aim to estimate the proportion of students who played video games in the week before the survey using two methods:
+
+The point estimate is 0.37. This is the best single estimate of the proportion based on the sample data. This means that approximately 37% of the students surveyed played a video game in the past week.
+
+With a 95% confidence level, we estimate that the true proportion lies between 0.12 and 0.62. This range accounts for the uncertainty in the estimate, with the standard error being 0.12.
+
+The point estimate provides a specific value, but the interval estimate acknowledges the uncertainty, offering a range where the true proportion is likely to fall.
+
+### Conclusion
+The distinction between these two estimates is for understanding the limitations of our inference. While the point estimate provides a single value, it does not account for the inherent variability in sampling. The confidence interval offers a range that acknowledges the uncertainty and gives a more comprehensive picture of where the true proportion likely lies.
+
 
 
 2. 
@@ -107,6 +127,7 @@ Confidence Intervals: The confidence intervals calculated in Question 1 may be b
 
 
 3. 
+### Methods
 ```{r}
 #find the point estimator
 point_estimate_average <- mean(videodata$time)
@@ -127,6 +148,15 @@ higher_interval_estimate_average <- point_estimate_average + 2*se
 lower_interval_estimate_average
 higher_interval_estimate_average
 ```
+### Analysis
+The average time spent playing video games in the week prior to the survey is represented by the point estimate of 1.24 hours. This average provides a summary measure of how much time, on average, respondents dedicated to gaming during that week.
+
+The shape of the sample distribution plays a critical role in determining the appropriateness of this interval estimate. If the distribution of the data is approximately normal, the interval estimate is considered reliable. In case the distribution is skewed or exhibits outliers, further examination through a simulation study can help validate the confidence interval. The simulation can assess the robustness of our interval estimate by generating numerous resamples to observe the distribution of sample means and the resulting confidence intervals.
+
+### Conclusion
+
+Overall, this analysis highlights the average gaming habits of students while acknowledging the variability and potential limitations of the data. It underscores the importance of understanding the underlying distribution when making estimates, as this directly affects the reliability of our conclusions. Further validation through simulation could enhance confidence in our interval estimate, ensuring it accurately reflects the true population parameters.
+
 
 
 4.
@@ -136,6 +166,19 @@ On the flip side, students who dislike gaming might concerns about its impact on
 ```
 5.
 ```{r}
+video_data_cleaned <- videodata[!apply(videodata == 99, 1, any),]
+
+like_to_play <- video_data_cleaned[video_data_cleaned$like > 3 ,]
+neutral <- video_data_cleaned[video_data_cleaned$like == 3,]
+dislike <- video_data_cleaned[video_data_cleaned$like < 3,]
+
+has_pc <- video_data_cleaned[video_data_cleaned$own == 1,]
+no_pc <- video_data_cleaned[video_data_cleaned$own == 0,]
+
+male <- video_data_cleaned[video_data_cleaned$sex == 1,]
+female <- video_data_cleaned[video_data_cleaned$sex == 0,]
+
+videoMultiple
 
 ```
 
