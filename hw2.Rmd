@@ -43,6 +43,7 @@ lower_interval_estimate_fraction
 higher_interval_estimate_fraction <- point_estimate_fraction + 2*se
 higher_interval_estimate_fraction
 se
+videodata
 ```
 ### Analysis
 We aim to estimate the proportion of students who played video games in the week before the survey using two methods:
@@ -160,27 +161,138 @@ Overall, this analysis highlights the average gaming habits of students while ac
 
 
 4.
+### Method
 ```{r}
-reasons_for_likeliness = "Some students may play for social connection, as online multiplayer games allow them to build and maintain friendships. Others might appreciate the creativity that games offer, allowing them to explore virtual worlds, customize characters, or engage in storytelling. Escapism is also a key motivator, as video games provide an immersive experience that can offer a break from everyday stress.
-On the flip side, students who dislike gaming might concerns about its impact on physical health, like eye strain or a sedentary lifestyle. Others might feel that games lack a real-life purpose, seeing them as a distraction from more meaningful activities or accomplishments. Addictive behavior is another reason students might dislike games, fearing they could lose control over the time spent gaming. Lastly, some might experience difficulty learning controls, which can make games less enjoyable, especially for casual players. "
+
+like_to_play <- videoMultiple[, c("relax", "coord","challenge","graphic","master","bored")]
+like_to_play[] <- lapply(like_to_play, function(x) as.numeric(as.character(x)))
+
+# Count the number of 1s in each column
+count_ones <- sapply(like_to_play, function(x) sum(x == 1, na.rm = TRUE))
+
+# Sort and get the names of the top 2 columns with the most 1s
+top_2_like <- names(sort(count_ones, decreasing = TRUE)[1:2])
+
+
+not_like_to_play <- videoMultiple[, c("time", "frust","lonely","rules","cost","boring","friends","point")]
+
+not_like_to_play[] <- lapply(not_like_to_play, function(x) as.numeric(as.character(x)))
+count_ones <- sapply(not_like_to_play, function(x) sum(x == 1, na.rm = TRUE))
+top_2_dislike <- names(sort(count_ones, decreasing = TRUE)[1:2])
+
+
+reasons_for_likeliness = "Like: relax, master. Dislike: time, cost"
 ```
+### Analysis
+The analysis of student attitudes toward video games reveals that enjoyment often comes from two main reasons: relaxation and mastery. Many students see video games as a way to unwind and escape from the stresses of school. They also enjoy the challenge of improving their skills and achieving new levels in games. However, several factors lead some students to dislike video games. Time constraints are significant, as students juggle busy schedules with classes and activities, making it hard to find time for gaming. Additionally, the cost of games and gaming equipment can be a burden for those on tight budgets. Students who don’t play or dislike video games often skip questions about their educational value or gaming habits, which limits understanding of their views.
+
+### Conclusion
+In conclusion, student attitudes toward video games are shaped by both positive and negative factors. While many appreciate the relaxation and sense of achievement that gaming offers, others are put off by the time and financial commitments involved. Further research is needed to understand the perspectives of students who do not engage with video games, as their insights could help improve gaming experiences. Overall, recognizing these attitudes can help educators and game developers create more appealing and accessible gaming options for students.
+
+
+
 5.
 ```{r}
-video_data_cleaned <- videodata[!apply(videodata == 99, 1, any),]
+video_data_like_cleaned <- videodata[videodata$like != 99, ]
 
-like_to_play <- video_data_cleaned[video_data_cleaned$like > 3 ,]
-neutral <- video_data_cleaned[video_data_cleaned$like == 3,]
-dislike <- video_data_cleaned[video_data_cleaned$like < 3,]
+video_data_work_cleaned <- video_data_like_cleaned[video_data_like_cleaned$work != 99,]
 
-has_pc <- video_data_cleaned[video_data_cleaned$own == 1,]
-no_pc <- video_data_cleaned[video_data_cleaned$own == 0,]
+video_data_work_cleaned$work[video_data_work_cleaned$work != 0 ] <- 1
 
-male <- video_data_cleaned[video_data_cleaned$sex == 1,]
-female <- video_data_cleaned[video_data_cleaned$sex == 0,]
 
-videoMultiple
+gender_vs_games <- table(video_data_like_cleaned$sex, video_data_like_cleaned$like)
+
+work_vs_games <- table(video_data_work_cleaned$work, video_data_work_cleaned$like)
+
+computer_vs_games <- table(video_data_like_cleaned$own, video_data_like_cleaned$like)
+
+barplot(gender_vs_games, beside = TRUE, col = c("blue", "red"),
+        main = "Gender vs. Likes Video Games",
+        xlab = "Like to play", ylab = "Count",
+        las = 2, cex.axis = 0.8,  # Increase text size for better visibility
+        legend = c("Female", "Male"),
+        names.arg = c("Never Played", "Very Much", "Somewhat", "not really", "not at all"),,
+        cex.names = 0.8,
+        mgp = c(4.2, 1, 0))  # Adjust label size and spacing
+
+
+
+# Call the function with your data
+
+# Works for Pay vs. Likes Video Games
+barplot(work_vs_games, beside = TRUE, col = c("blue", "red"),
+        main = "Work vs. Likes Video Games",  # Main title
+        xlab = "Like to play", ylab = "Count",  # Axis labels
+        las = 2, cex.axis = 0.8,  # Rotate x-axis labels and adjust font size
+        legend = c("No Work", "Work"),  # Legend labels
+        names.arg = c("Never Played", "Very Much", "Somewhat", "not really", "not at all"),  # X-axis labels
+        cex.names = 0.8,  # Adjust x-axis label font size
+        mgp = c(4.2, 1, 0))
+
+
+
+# Works for Pay vs. Likes Video Games
+barplot(computer_vs_games, beside = TRUE, col = c("blue", "red"),
+        main = "Owns Computer vs. Likes Video Games", 
+        xlab = "Like to play", ylab = "Count",
+        las = 2, cex.axis = 0.8,  # Increase text size for better visibility
+        legend = c("No PC", "Have PC"),
+        names.arg = c("Never Played", "Very Much", "Somewhat", "not really", "not at all"),
+        cex.names = 0.8,
+        mgp = c(4.2, 1, 0)) 
 
 ```
 
+### Analysis
+Gender Comparison:
+Males generally show a higher preference for video games compared to females. For instance, more males fall into the "Very Much" and "Somewhat" categories for liking video games, while females tend to have lower numbers in these categories.
+Both genders have a small number of individuals who "Never Played" video games or do not like them at all, but the proportion of females who "Not really" or "Not at all" enjoy games is slightly higher than that of males.
+
+
+Work Status Comparison:
+Those who work for pay also show a significant interest in video games, with a considerable number in the "Very Much" and "Somewhat" categories. However, the group that does not work tends to have a slightly higher representation in the "Somewhat" category, indicating they might enjoy gaming but not as passionately as those who work.
+A relatively small number of individuals in both groups (working and non-working) fall under the "Not really" or "Not at all" categories, but those who work for pay generally express a greater interest in gaming overall.
+
+
+Computer Ownership Comparison:
+Those who own a computer show a much stronger preference for video games, especially in the "Very Much" and "Somewhat" categories, indicating a clear association between computer ownership and interest in gaming.
+The "Not really" and "Not at all" categories are primarily occupied by those who do not own a computer, suggesting that a lack of computer ownership correlates with a lesser interest in gaming.
+
+###Conclusion:
+These graphs suggest that gender, work status, and computer ownership influence interest in video games. Males, individuals who work for pay, and those who own computers are generally more inclined to enjoy gaming, especially in higher engagement categories. In contrast, females, those without work, and individuals without computers are more likely to have a moderate or lower interest in video games. This data could be useful in understanding demographic trends in gaming preferences and can guide decisions in marketing and content creation within the gaming industry.
 
 6. 
+```{r}
+
+# Map numeric grades to letter grades
+videodata$grade <- factor(videodata$grade, levels = c(4, 3, 2), labels = c("A", "B", "C"))
+
+# Calculate total number of students
+total_students <- nrow(data)
+
+# Count grades distribution among respondents
+grade_counts <- prop.table(table(data$grade))
+
+# Assume non-respondents as failing (D or lower) and adjust
+respondents <- length(na.omit(videodata$grade))
+non_respondents <- sum(rowSums(is.na(videoMultiple)) > 0)
+
+# Create adjusted grade distribution
+adjusted_grade_counts <- grade_counts
+adjusted_grade_counts <- c(adjusted_grade_counts, D_or_lower = non_respondents / total_students)
+
+# Normalize to get adjusted distribution including non-respondents as failing
+adjusted_grade_distribution <- adjusted_grade_counts / sum(adjusted_grade_counts)
+
+# Display results
+cat("Observed grade distribution:\n")
+print(grade_counts)
+cat("\nAdjusted grade distribution (assuming non-respondents as D or lower):\n")
+print(adjusted_grade_distribution)
+
+# Define target distribution
+target_distribution <- c(A = 0.2, B = 0.3, C = 0.4, D_or_lower = 0.1)
+cat("\nTarget grade distribution:\n")
+print(target_distribution)
+```
+
