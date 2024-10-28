@@ -4,9 +4,9 @@ output: pdf_document
 date: "2024-10-21"
 ---
 # 0. Contribution Statement
-Student 1: Answered questions 1, 3, and 4. Wrote initial code for questions 5 and 6.
+Student 1: Answered questions 1, 3, and 4 and did the analysis/conclusions. Wrote initial code and analysis/conclusions for questions 5 and 6.
 
-Student 2: Answered question 2. Finished and polished questions 5 and 6. Formatted and wrote rest of report (Introduction, Conclusion, Discussion). Did the advanced analysis. Wrote all the methods sections.
+Student 2: Answered question 2 and did analysis/conclusions. Finished and polished questions 5 and 6 analysis/conclusions. Formatted and wrote rest of report (Introduction, Conclusion, Discussion). Did the advanced analysis. Wrote the methods sections.
 
 # 1. Introduction
 This study aims to explore the gaming habits and preferences of university students, focusing on those enrolled in a statistics course during the Fall 1994 semester at the University of California, Berkeley. Video gaming was becoming increasingly relevant to student life, both socially and academically, yet hadn't risen to the popularity that it has today.
