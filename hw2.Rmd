@@ -1,298 +1,355 @@
 ---
-title: "hw2"
+title: "Exploring Video Game Habits Among College Students"
 output: pdf_document
 date: "2024-10-21"
 ---
+# 0. Contribution Statement
+Student 1: Answered questions 1, 3, and 4. Wrote initial code for questions 5 and 6.
+
+Student 2: Answered question 2. Finished and polished questions 5 and 6. Formatted and wrote rest of report (Introduction, Conclusion, Discussion). Did the advanced analysis. Wrote all the methods sections.
+
 # 1. Introduction
-The purpose of the survey conducted at the University of California, Berkeley, was to gain a deeper understanding of the gaming habits and preferences of students enrolled in statistics courses during the Fall 1994 semester. By targeting a specific cohort of 314 eligible students from Statistics 2, Section 1, the researchers aimed to gather data on how frequently these students engaged in video gaming and their likes and dislikes related to the activity.
+This study aims to explore the gaming habits and preferences of university students, focusing on those enrolled in a statistics course during the Fall 1994 semester at the University of California, Berkeley. Video gaming was becoming increasingly relevant to student life, both socially and academically, yet hadn't risen to the popularity that it has today.
+
+To conduct this study, a survey was administered to a carefully selected cohort of students. The initial pool consisted of 3,000 to 4,000 students enrolled in statistics courses at Berkeley. From this larger group, the study focused specifically on 314 eligible students from Statistics 2, Section 1. These students were chosen based on their participation in the second exam of the semester, which took place one week before the survey. 95 students were randomly selected from this group. Ultimately, 91 students provided complete responses, forming the final dataset for analysis.
+
+The primary objective of this analysis is to address several key questions regarding students' gaming habits and their impact on academic performance. The specific questions are as follows:
+
+1. What proportion of students engage in video gaming, and how frequently do they play?
+
+2. How does the amount of time spent gaming compare to students' reported frequency of play?
+
+3. What is the average time students dedicate to gaming, and how confident can we be in this estimate?
+
+4. What are students' attitudes towards video games, and what factors influence their preferences?
+
+5. How do demographic factors—such as gender, employment status, and computer ownership—affect gaming habits and preferences?
+
+6. How do students' expected grades align with the target grade distribution set by the course including non-respondents?
+
+In the first section, we present the methodology used for data processing and provide a summary of the dataset's characteristics. Following this, each research question is analyzed in detail, utilizing a combination of numerical, graphical, and comparative methods. Advanced analysis will further explore trends and relationships that extend beyond the initial research questions. Finally, the conclusion will summarize the findings, discuss their implications, and suggest directions for future research.
 
 # 2. Analysis
-```{r}
-#read data
-videodata <- read.table("videodata.txt",header =TRUE)
-videodata
 
-```
-
-
-
-
-```{r}
-#read data
-videoMultiple <- read.table("videoMultiple.txt",header = TRUE)
-videoMultiple
-```
-
-1. 
+## 2.1 What proportion of students engage in video gaming, and how frequently do they play?
+ 
 ### Method
+To address Question 1, we aimed to estimate the proportion of students who played video games in the week before the survey. We began by calculating a point estimate, which represents the best single estimate of the proportion based on the sample data. This was achieved by dividing the number of students who reported playing video games in the prior week by the total number of respondents. To capture the uncertainty associated with this point estimate, we constructed a 95% confidence interval using the standard error of the proportion. This interval estimate provides a range in which the true proportion is likely to fall, accounting for the natural variability in the sample. Specifically, the interval was calculated by subtracting and adding twice the standard error from the point estimate, giving us a range with a 95% level of confidence. The use of both a point estimate and an interval estimate allows us to offer a precise value while acknowledging the inherent uncertainty due to the sample size and potential biases.
 
+### Analysis
 ```{r}
-#find the point estimator
-point_estimate_fraction <- sum(videodata$time >0) / length(videodata$time)
-
+# read data
+videodata <- read.table("videodata.txt", header = TRUE)
+# read data
+videoMultiple <- read.table("videoMultiple.txt", header = TRUE)
+# find the point estimator
+point_estimate_fraction <- sum(videodata$time > 0) / length(videodata$time)
 confidence_level <- 0.95
-z <- qnorm((confidence_level+1)/2)
-
-#find proportion standard error
-se <- sqrt(point_estimate_fraction * (1-point_estimate_fraction)) / sqrt(length(videodata))
-
-#find lower and upper confidence interval
+z <- qnorm((confidence_level + 1) / 2)
+# find proportion standard error
+se <- sqrt(point_estimate_fraction * (1 - point_estimate_fraction)) / sqrt(length(videodata))
+# find lower and upper confidence interval
 lower_interval_estimate_fraction <- point_estimate_fraction - 2 * se
 lower_interval_estimate_fraction
-
-higher_interval_estimate_fraction <- point_estimate_fraction + 2*se
+higher_interval_estimate_fraction <- point_estimate_fraction + 2 * se
 higher_interval_estimate_fraction
-se
-videodata
 ```
-### Analysis
-We aim to estimate the proportion of students who played video games in the week before the survey using two methods:
+We estimated the proportion of students who played video games in the week prior to the survey using two methods: a point estimate and a confidence interval. The point estimate, which is 0.37, represents the best single estimate of the proportion based on our sample data. This indicates that approximately 37% of the surveyed students reported playing a video game in the previous week.
 
-The point estimate is 0.37. This is the best single estimate of the proportion based on the sample data. This means that approximately 37% of the students surveyed played a video game in the past week.
+To account for potential variability in our sample, we also constructed a 95% confidence interval around the point estimate. With a standard error of 0.12, the interval ranges from 0.12 to 0.62. This means we can be 95% confident that the true proportion of students who played video games lies within this range. The confidence interval acknowledges the uncertainty inherent in any sample-based estimate, providing a more nuanced understanding of where the true proportion likely falls.
 
-With a 95% confidence level, we estimate that the true proportion lies between 0.12 and 0.62. This range accounts for the uncertainty in the estimate, with the standard error being 0.12.
-
-The point estimate provides a specific value, but the interval estimate acknowledges the uncertainty, offering a range where the true proportion is likely to fall.
+The distinction between the point estimate and the confidence interval is important: while the point estimate offers a precise value, the interval estimate reflects the margin of error, which arises due to sampling variability. This dual approach gives a clearer picture of the data's reliability, suggesting that although 37% is the best estimate, the true proportion could reasonably be as low as 12% or as high as 62%.
 
 ### Conclusion
-The distinction between these two estimates is for understanding the limitations of our inference. While the point estimate provides a single value, it does not account for the inherent variability in sampling. The confidence interval offers a range that acknowledges the uncertainty and gives a more comprehensive picture of where the true proportion likely lies.
+In summary, the analysis of the proportion of students who played video games in the week prior to the survey highlights the importance of using both point estimates and confidence intervals in data interpretation. The point estimate of 0.37 serves as a clear representation of the proportion of students engaged in gaming, but it is essential to recognize its limitations due to sampling variability. The accompanying confidence interval, ranging from 0.12 to 0.62, provides critical insight into the uncertainty associated with this estimate, allowing for a more nuanced understanding of the data.
 
+By acknowledging the inherent variability in our sample and the potential for biases, we gain a more comprehensive perspective on the true gaming habits of students. This dual approach not only enhances our understanding of the data but also emphasizes the significance of statistical inference in drawing meaningful conclusions from survey results. Ultimately, the findings from this analysis underscore the value of carefully considering both point estimates and confidence intervals when interpreting survey data, as they collectively inform our understanding of student engagement with video gaming.
 
+## 2.2 How does the amount of time spent gaming compare to students' reported frequency of play?
 
-2. 
+### Method
+To analyze how the time spent playing video games relates to reported frequency of play (daily, weekly, etc.), we filtered the dataset to exclude rows with missing or invalid frequency data (specifically those with NA or coded as 99). We calculated the average and standard deviation of gaming hours for each frequency category. The results were organized into a summary statistics data frame that included frequency categories, average time, standard deviations, and respondent counts. To visualize the findings, we created a bar plot of average time spent gaming per frequency category and a box plot to display the distribution of gaming time across different frequencies, considering potential influences such as the recent exam week.
+
+### Analysis
 ```{r}
 # Filter out rows
 videodata_clean <- videodata[!is.na(videodata$freq) & videodata$freq != 99, ]
-
 avg_time <- tapply(videodata_clean$time, videodata_clean$freq, mean, na.rm = TRUE)
 sd_time <- tapply(videodata_clean$time, videodata_clean$freq, sd, na.rm = TRUE)
 count <- table(videodata_clean$freq)
 
-# summary statistics
+# Summary statistics
 summary_stats <- data.frame(
     freq = names(avg_time),
     avg_time = as.numeric(avg_time),
     sd_time = as.numeric(sd_time),
     count = as.numeric(count)
 )
-
-print(summary_stats)
-
+```
+```{r, fig.width=5, fig.height=3, fig.align='center'}
 # Barplot of average time spent per frequency category
 barplot(summary_stats$avg_time,
     names.arg = summary_stats$freq,
     main = "Average Time Spent by Reported Frequency",
     xlab = "Reported Frequency of Play",
     ylab = "Average Time Spent (hours)",
-    ylim = c(0, max(summary_stats$avg_time, na.rm = TRUE) + 2)
+    ylim = c(0, max(summary_stats$avg_time, na.rm = TRUE) + 2),
+    cex.names = 0.8,
+    cex.lab = 0.8,
+    cex.main = 0.9
 )
 ```
-```{r}
+```{r, fig.width=7, fig.height=3, fig.align='center'}
 # Boxplot of time spent by frequency category
 boxplot(time ~ freq,
     data = videodata_clean,
     main = "Time Spent Playing Video Games by Reported Frequency",
-    xlab = "Reported Frequency of Play",
-    ylab = "Time Spent (hours)"
+    xlab = "Time Spent (hours)",
+    ylab = "Reported Frequency of Play",
+    horizontal = TRUE,
+    cex.lab = 0.8,
+    cex.main = 0.9
 )
 ```
-The average time spent by students who reported playing daily was approximately 4.44 hours for the week. This translates to less than 1 hour per day on average, which is low given their self-categorization.
+Students who reported daily gaming averaged approximately 4.44 hours for the week, translating to less than 1 hour per day. This low average suggests that daily sessions may be brief, likely reflecting casual gaming habits, especially since the dataset originates from 1994, prior to mobile gaming.
 
-This suggests that the frequency of daily gaming sessions might be short, which may be due to casual gamers (given the dataset was created in 1994, mobile gaming can be reasonably ignored).
-The high standard deviation (5.57) implies significant variability, with some daily players playing much longer than others, indicating the presence of outliers or different interpretations of what "daily play" means.
+The high standard deviation (5.57) indicates significant variability in daily playtime, with some students gaming much longer, pointing to outliers or differing interpretations of "daily play." Weekly players averaged 2.54 hours, also with a high standard deviation (5.50), suggesting inconsistent gaming patterns.
 
-Students who reported playing weekly spent an average of 2.54 hours in the prior week. The standard deviation is also quite high (5.50), indicating a wide range of weekly playtime. The variability could be due to students engaging in longer gaming sessions occasionally but not consistently.
+Both monthly (0.056 hours) and semesterly (0.043 hours) averages are extremely low, indicating minimal engagement with video games. The timing of the survey, following an exam week, likely reduced reported gaming time, as students shifted focus to studying.
 
-Notably, there are pretty significant outliers in both categories, with the most extreme being a 30 hour playtime for someone in the weekly categorization.
+This context may explain the lower average hours for daily players, who could have curtailed their gaming during exams. The atypical nature of the exam week data might not accurately represent normal gaming habits, contributing to skewed estimates. Consequently, the point estimate for students playing video games may be lower than usual, and confidence intervals from Question 1 might be biased downward due to reduced variability in playtime during the exam period.
 
-Monthly and Semesterly Players: The averages for these groups are extremely low.
+### Conclusion
+In summary, the analysis of gaming habits reveals that while some students report frequent gaming, the actual time spent is often limited, particularly among daily players. The influence of an exam week likely led to reduced gaming hours, impacting both average estimates and confidence intervals. This suggests that reported gaming habits may not accurately reflect typical behaviors during non-exam periods. Future studies could benefit from examining gaming patterns across different academic calendars to provide a more comprehensive understanding of student engagement with video games.
 
-Monthly: 0.056 hours 
+## 2.3 What is the average time students dedicate to gaming, and how confident can we be in this estimate?
 
-Semesterly: 0.043 hours
-
-These figures suggest minimal engagement with video games, aligning with their infrequent gaming habits.
-
-The survey was conducted following a week that included exams, which likely influenced the reported and actual gaming behaviors.
-
-Reduced Gaming Time: An exam week would lead to students to allocate more time to studying. This would likely result in a temporary decrease in gaming time, especially for those who usually play more frequently.
-
-This could explain the low average gaming hours for the "Daily" category, where students, despite reporting daily gaming habits, might have significantly shortened their gaming time during exams.
-The exam effect may have impacted the accuracy of the Weekly group as well, reducing the typical number of hours they would have played in a regular week without exams.
-Skewed Estimates: The data collected during an atypical exam week might not accurately represent students' normal gaming habits. The extreme outliers may stand out due to average gaming time decreasing. (eg. a few students didn't have exams or didn't care)
-
-Point Estimate Impact: The point estimate for the proportion of students who played video games during the week might be lower than usual due to the reduced engagement during exams.
-
-Confidence Intervals: The confidence intervals calculated in Question 1 may be biased downward, as the variability in playtime could be different in a regular week. The exam week’s reduction in gaming likely compressed the range of playtimes, affecting standard error calculations.
-
-
-
-3. 
 ### Methods
+To estimate the average amount of time spent playing video games, we calculated the point estimate by taking the mean of the time variable from the dataset. The confidence level was set at 95%, allowing us to determine the corresponding z-value using the standard normal distribution. We calculated the variance of the time data to understand its spread and derived the standard error from this variance, adjusting it for the sample size. Finally, we computed the lower and upper bounds of the 95% confidence interval for the average time spent playing video games by subtracting and adding twice the standard error to the point estimate. This approach facilitates an understanding of the average gaming time while considering the variability inherent in the sample distribution.
+
+### Analysis
 ```{r}
-#find the point estimator
+# find the point estimator
 point_estimate_average <- mean(videodata$time)
-
 confidence_leve <- 0.95
-z <- qnorm((1+confidence_level)/2)
-
-#get the variance of data
-variance <- 1/length(videodata$time) * sum((videodata$time - point_estimate_average)**2)
-
-#find average standard error
-se <- sqrt(variance) / sqrt (length(videodata$time))
-
-#lower and upper 95% confidence interval
-lower_interval_estimate_average <- point_estimate_average - 2*se
-higher_interval_estimate_average <- point_estimate_average + 2*se
+z <- qnorm((1 + confidence_level) / 2)
+# get the variance of data
+variance <- 1 / length(videodata$time) * sum((videodata$time - point_estimate_average)**2)
+# find average standard error
+se <- sqrt(variance) / sqrt(length(videodata$time))
+# lower and upper 95% confidence interval
+lower_interval_estimate_average <- point_estimate_average - 2 * se
+higher_interval_estimate_average <- point_estimate_average + 2 * se
 
 lower_interval_estimate_average
 higher_interval_estimate_average
 ```
-### Analysis
 The average time spent playing video games in the week prior to the survey is represented by the point estimate of 1.24 hours. This average provides a summary measure of how much time, on average, respondents dedicated to gaming during that week.
 
 The shape of the sample distribution plays a critical role in determining the appropriateness of this interval estimate. If the distribution of the data is approximately normal, the interval estimate is considered reliable. In case the distribution is skewed or exhibits outliers, further examination through a simulation study can help validate the confidence interval. The simulation can assess the robustness of our interval estimate by generating numerous resamples to observe the distribution of sample means and the resulting confidence intervals.
 
 ### Conclusion
-
 Overall, this analysis highlights the average gaming habits of students while acknowledging the variability and potential limitations of the data. It underscores the importance of understanding the underlying distribution when making estimates, as this directly affects the reliability of our conclusions. Further validation through simulation could enhance confidence in our interval estimate, ensuring it accurately reflects the true population parameters.
 
+## 2.4 What are students' attitudes towards video games, and what factors influence their preferences?
 
-
-4.
 ### Method
+To assess students' attitudes toward video games, we analyzed the responses from the second part of the survey, focusing on reasons for liking and disliking gaming. We extracted relevant columns related to enjoyment—such as relaxation, coordination, challenge, graphics, mastery, and boredom—and converted them to numeric format. We then counted the number of respondents who selected "1" (indicating agreement) for each reason, identifying the top two reasons for enjoyment.
+
+For disliking video games, we analyzed responses regarding frustration, loneliness, rules, cost, boredom, friends' participation, and perceived value using the same counting method. This approach provided insight into the primary factors influencing students' attitudes, while considering nonrespondents who skipped questions if they reported never playing or disliking video games. The key reasons were summarized in a concise statement.
+
+### Analysis
 ```{r}
-
-like_to_play <- videoMultiple[, c("relax", "coord","challenge","graphic","master","bored")]
+like_to_play <- videoMultiple[, c("relax", "coord", "challenge", "graphic", "master", "bored")]
 like_to_play[] <- lapply(like_to_play, function(x) as.numeric(as.character(x)))
-
 # Count the number of 1s in each column
 count_ones <- sapply(like_to_play, function(x) sum(x == 1, na.rm = TRUE))
-
 # Sort and get the names of the top 2 columns with the most 1s
 top_2_like <- names(sort(count_ones, decreasing = TRUE)[1:2])
-
-
-not_like_to_play <- videoMultiple[, c("time", "frust","lonely","rules","cost","boring","friends","point")]
-
+not_like_to_play <- videoMultiple[, c("time", "frust", "lonely", "rules", "cost", "boring", "friends", "point")]
 not_like_to_play[] <- lapply(not_like_to_play, function(x) as.numeric(as.character(x)))
 count_ones <- sapply(not_like_to_play, function(x) sum(x == 1, na.rm = TRUE))
 top_2_dislike <- names(sort(count_ones, decreasing = TRUE)[1:2])
-
-
-reasons_for_likeliness = "Like: relax, master. Dislike: time, cost"
+reasons_for_likeliness <- "Like: relax, master. Dislike: time, cost"
 ```
-### Analysis
 The analysis of student attitudes toward video games reveals that enjoyment often comes from two main reasons: relaxation and mastery. Many students see video games as a way to unwind and escape from the stresses of school. They also enjoy the challenge of improving their skills and achieving new levels in games. However, several factors lead some students to dislike video games. Time constraints are significant, as students juggle busy schedules with classes and activities, making it hard to find time for gaming. Additionally, the cost of games and gaming equipment can be a burden for those on tight budgets. Students who don’t play or dislike video games often skip questions about their educational value or gaming habits, which limits understanding of their views.
 
 ### Conclusion
 In conclusion, student attitudes toward video games are shaped by both positive and negative factors. While many appreciate the relaxation and sense of achievement that gaming offers, others are put off by the time and financial commitments involved. Further research is needed to understand the perspectives of students who do not engage with video games, as their insights could help improve gaming experiences. Overall, recognizing these attitudes can help educators and game developers create more appealing and accessible gaming options for students.
 
+## 2.5 How do demographic factors—such as gender, employment status, and computer ownership—affect gaming habits and preferences?
 
-
-5.
-```{r}
-video_data_like_cleaned <- videodata[videodata$like != 99, ]
-
-video_data_work_cleaned <- video_data_like_cleaned[video_data_like_cleaned$work != 99,]
-
-video_data_work_cleaned$work[video_data_work_cleaned$work != 0 ] <- 1
-
-
-gender_vs_games <- table(video_data_like_cleaned$sex, video_data_like_cleaned$like)
-
-work_vs_games <- table(video_data_work_cleaned$work, video_data_work_cleaned$like)
-
-computer_vs_games <- table(video_data_like_cleaned$own, video_data_like_cleaned$like)
-
-barplot(gender_vs_games, beside = TRUE, col = c("blue", "red"),
-        main = "Gender vs. Likes Video Games",
-        xlab = "Like to play", ylab = "Count",
-        las = 2, cex.axis = 0.8,  # Increase text size for better visibility
-        legend = c("Female", "Male"),
-        names.arg = c("Never Played", "Very Much", "Somewhat", "not really", "not at all"),,
-        cex.names = 0.8,
-        mgp = c(4.2, 1, 0))  # Adjust label size and spacing
-
-
-
-# Call the function with your data
-
-# Works for Pay vs. Likes Video Games
-barplot(work_vs_games, beside = TRUE, col = c("blue", "red"),
-        main = "Work vs. Likes Video Games",  # Main title
-        xlab = "Like to play", ylab = "Count",  # Axis labels
-        las = 2, cex.axis = 0.8,  # Rotate x-axis labels and adjust font size
-        legend = c("No Work", "Work"),  # Legend labels
-        names.arg = c("Never Played", "Very Much", "Somewhat", "not really", "not at all"),  # X-axis labels
-        cex.names = 0.8,  # Adjust x-axis label font size
-        mgp = c(4.2, 1, 0))
-
-
-
-# Works for Pay vs. Likes Video Games
-barplot(computer_vs_games, beside = TRUE, col = c("blue", "red"),
-        main = "Owns Computer vs. Likes Video Games", 
-        xlab = "Like to play", ylab = "Count",
-        las = 2, cex.axis = 0.8,  # Increase text size for better visibility
-        legend = c("No PC", "Have PC"),
-        names.arg = c("Never Played", "Very Much", "Somewhat", "not really", "not at all"),
-        cex.names = 0.8,
-        mgp = c(4.2, 1, 0)) 
-
-```
+### Method
+To examine the differences between students who enjoy playing video games and those who do not, we computed the proportions of responses across gender, work status, and computer ownership. The analysis includes graphical representations in the form of bar plots, allowing for a visual comparison of the enjoyment of video games across the defined groups.
 
 ### Analysis
-Gender Comparison:
-Males generally show a higher preference for video games compared to females. For instance, more males fall into the "Very Much" and "Somewhat" categories for liking video games, while females tend to have lower numbers in these categories.
-Both genders have a small number of individuals who "Never Played" video games or do not like them at all, but the proportion of females who "Not really" or "Not at all" enjoy games is slightly higher than that of males.
-
-
-Work Status Comparison:
-Those who work for pay also show a significant interest in video games, with a considerable number in the "Very Much" and "Somewhat" categories. However, the group that does not work tends to have a slightly higher representation in the "Somewhat" category, indicating they might enjoy gaming but not as passionately as those who work.
-A relatively small number of individuals in both groups (working and non-working) fall under the "Not really" or "Not at all" categories, but those who work for pay generally express a greater interest in gaming overall.
-
-
-Computer Ownership Comparison:
-Those who own a computer show a much stronger preference for video games, especially in the "Very Much" and "Somewhat" categories, indicating a clear association between computer ownership and interest in gaming.
-The "Not really" and "Not at all" categories are primarily occupied by those who do not own a computer, suggesting that a lack of computer ownership correlates with a lesser interest in gaming.
-
-###Conclusion:
-These graphs suggest that gender, work status, and computer ownership influence interest in video games. Males, individuals who work for pay, and those who own computers are generally more inclined to enjoy gaming, especially in higher engagement categories. In contrast, females, those without work, and individuals without computers are more likely to have a moderate or lower interest in video games. This data could be useful in understanding demographic trends in gaming preferences and can guide decisions in marketing and content creation within the gaming industry.
-
-6. 
 ```{r}
+# Cleaning data
+video_data_like_cleaned <- videodata[videodata$like != 99, ]
+video_data_work_cleaned <- video_data_like_cleaned[video_data_like_cleaned$work != 99, ]
+video_data_work_cleaned$work[video_data_work_cleaned$work != 0] <- 1
+```
+```{r}
+# Prop for each category
+gender_vs_games <- table(video_data_like_cleaned$sex, video_data_like_cleaned$like)
+gender_vs_games_prop <- prop.table(gender_vs_games, margin = 1)
 
-# Map numeric grades to letter grades
-videodata$grade <- factor(videodata$grade, levels = c(4, 3, 2), labels = c("A", "B", "C"))
+work_vs_games <- table(video_data_work_cleaned$work, video_data_work_cleaned$like)
+work_vs_games_prop <- prop.table(work_vs_games, margin = 1)
 
-# Calculate total number of students
-total_students <- nrow(data)
+computer_vs_games <- table(video_data_like_cleaned$own, video_data_like_cleaned$like)
+computer_vs_games_prop <- prop.table(computer_vs_games, margin = 1)
+```
+```{r, fig.width=6, fig.height=3}
+# plots + formatting
+par(mar = c(5, 10, 4, 2), cex.lab = 0.8, cex.axis = 0.8, cex.main = 0.9)
 
-# Count grades distribution among respondents
-grade_counts <- prop.table(table(data$grade))
+# Plot for Gender vs. Likes Video Games
+max_x <- max(gender_vs_games_prop) * 1.1
 
-# Assume non-respondents as failing (D or lower) and adjust
-respondents <- length(na.omit(videodata$grade))
-non_respondents <- sum(rowSums(is.na(videoMultiple)) > 0)
+barplot(gender_vs_games_prop,
+    beside = TRUE, horiz = TRUE, col = c("blue", "red"),
+    main = "Gender vs. Likes Video Games (Proportion)",
+    xlab = "Proportion",
+    ylab = "",
+    xlim = c(0, max_x),
+    names.arg = c("Never Played", "Very Much", "Somewhat", "Not Really", "Not At All"),
+    las = 1
+)
+legend("topright", legend = c("Female", "Male"), fill = c("blue", "red"), cex = 0.7)
+mtext("Like to play", side = 2, line = 8, cex = 0.8)
 
-# Create adjusted grade distribution
-adjusted_grade_counts <- grade_counts
-adjusted_grade_counts <- c(adjusted_grade_counts, D_or_lower = non_respondents / total_students)
+# Plot for Work vs. Likes Video Games
+max_x <- max(work_vs_games_prop) * 1.2
 
-# Normalize to get adjusted distribution including non-respondents as failing
-adjusted_grade_distribution <- adjusted_grade_counts / sum(adjusted_grade_counts)
+barplot(work_vs_games_prop,
+    beside = TRUE, horiz = TRUE, col = c("blue", "red"),
+    main = "Work vs. Likes Video Games (Proportion)",
+    xlab = "Proportion",
+    ylab = "",
+    xlim = c(0, max_x),
+    names.arg = c("Never Played", "Very Much", "Somewhat", "Not Really", "Not At All"),
+    las = 1
+)
+legend("topright", legend = c("No Work", "Work"), fill = c("blue", "red"), cex = 0.7)
+mtext("Like to play", side = 2, line = 8, cex = 0.8)
+# Plot for Owns Computer vs. Likes Video Games
+max_x <- max(computer_vs_games_prop) * 1.1
 
-# Display results
-cat("Observed grade distribution:\n")
-print(grade_counts)
-cat("\nAdjusted grade distribution (assuming non-respondents as D or lower):\n")
-print(adjusted_grade_distribution)
+barplot(computer_vs_games_prop,
+    beside = TRUE, horiz = TRUE, col = c("blue", "red"),
+    main = "Owns Computer vs. Likes Video Games (Proportion)",
+    xlab = "Proportion",
+    ylab = "",
+    xlim = c(0, max_x),
+    names.arg = c("Never Played", "Very Much", "Somewhat", "Not Really", "Not At All"),
+    las = 1
+)
+legend("topright", legend = c("No PC", "Have PC"), fill = c("blue", "red"), cex = 0.7)
+mtext("Like to play", side = 2, line = 8, cex = 0.8)
 
-# Define target distribution
-target_distribution <- c(A = 0.2, B = 0.3, C = 0.4, D_or_lower = 0.1)
-cat("\nTarget grade distribution:\n")
-print(target_distribution)
+# Reset par settings
+par(mar = c(5, 4, 4, 2) + 0.1)
 ```
 
+Gender Comparison:
+The analysis reveals that males generally exhibit a stronger preference for video games compared to females. This is evidenced by the higher proportion of males who identify with the "Very Much" and "Somewhat" categories regarding their enjoyment of video games. In contrast, females demonstrate lower representation in these categories, indicating a more moderate interest. Moreover, a notable portion of females classify their enjoyment as "Not Really" or "Not At All," suggesting a higher inclination toward disinterest compared to their male counterparts.
+
+Work Status Comparison:
+Students who work for pay demonstrate significant interest in video games, with a substantial representation in the "Very Much" and "Somewhat" categories. This contrasts with those who do not work, who show a slightly higher concentration in the "Somewhat" category. This trend suggests that while non-working students may enjoy gaming, it is likely not as intense as their working peers. Additionally, both groups exhibit relatively low numbers in the "Not Really" or "Not At All" categories, although the working group expresses greater overall enthusiasm for gaming.
+
+Computer Ownership Comparison:
+Ownership of a computer correlates strongly with a heightened interest in video games. Those who own a computer report enjoying video games significantly more, particularly in the "Very Much" and "Somewhat" categories. This finding underscores the relationship between access to gaming technology and engagement levels. Conversely, students without a computer predominantly occupy the "Not Really" and "Not At All" categories, indicating that the absence of a personal computer may contribute to reduced interest in video gaming.
+
+### Conclusion
+Overall, these findings highlight how gender, work status, and computer ownership significantly influence students' preferences for video games. Males, individuals who work, and those with access to computers display a greater propensity for gaming compared to their counterparts.
+
+## 2.6 How do students' expected grades align with the target grade distribution set by the course including non-respondents?
+
+### Method
+To analyze students' expected grades, we identified non-respondents by subtracting the number of valid responses from the total number of students surveyed. Next, the grades were converted from numeric to categorical (A, B, C, DF) for clarity. We recalculated raw counts and adjusted the proportions to account for non-respondents, labeling them as DF. Finally, we compared the adjusted proportions of expected grades against a predefined target distribution using a bar plot to visually represent the differences between observed and target proportions.
+
+### Analysis
+```{r, fig.width=6, fig.height=3}
+videodata <- read.table("videodata.txt", header = TRUE)
+
+total_students <- 95
+# Count valid respondents based on available grade data
+respondents <- sum(!is.na(videodata$grade))
+# Calculate the number of non-respondents
+non_respondents <- total_students - respondents
+# Convert 'grade' to numeric before mapping
+videodata$grade <- as.numeric(videodata$grade)
+# Properly map numeric grades to letter grades
+videodata$grade <- factor(videodata$grade, levels = c(4, 3, 2), labels = c("A", "B", "C"))
+# Recalculate the raw counts after mapping to ensure accuracy
+raw_counts <- table(videodata$grade)
+# Calculate the adjusted proportions with non-respondents included
+adjusted_counts <- c(raw_counts, DF = non_respondents)
+adjusted_proportions <- adjusted_counts / sum(adjusted_counts)
+
+grade_labels <- c("A", "B", "C", "DF")
+adjusted_proportions_for_plot <- adjusted_proportions[grade_labels]
+# target grade distribution
+target_distribution <- c(A = 0.2, B = 0.3, C = 0.4, DF = 0.1)
+
+# Visual comparison of expected and target distributions
+barplot(rbind(adjusted_proportions_for_plot, target_distribution[grade_labels]),
+    beside = TRUE,
+    horiz = TRUE,
+    col = c("blue", "green"),
+    main = "Grade Distribution Comparison (Expected vs. Target)",
+    xlab = "Proportion",
+    ylab = "Grade",
+    xlim = c(0, 0.6),
+    names.arg = grade_labels,
+    cex.names = .8
+)
+legend("topright", legend = c("Expected", "Target"), fill = c("blue", "green"), cex = 0.7)
+```
+The analysis of students' expected grades revealed distinct differences when comparing the observed distribution to the target distribution. The adjusted proportions indicated a higher prevalence of A's and  B's than anticipated, suggesting that students have an optimistic outlook regarding their grades. Additionally, the proportions of grades like C's and lower were far lower than the target values. This may be in indication that students who were not succeeding were not sufficiently represented in this survey. There is a possibility that they may not have even shown up to the exam, meaning they were never a part of the original sample group.
+
+### Conclusion
+In conclusion, the analysis of expected grades among students highlighted a discrepancy between their optimistic self-assessments and the established target distribution. While the higher proportions of A's and B's suggest a positive outlook on academic performance, the lower representation of C's and below raises concerns about the inclusion of struggling students in the survey. This potential underrepresentation may skew the overall perception of student expectations.
+
+# 3. Advanced Analysis
+
+## Question
+In this advanced analysis, we aim to explore whether there is a significant association between gender and the preference for playing video games. Specifically, we want to determine if males are more likely to express a preference for gaming compared to females, or if this difference is simply due to random chance.
+
+## Method
+To address this question, we simplified the survey's original gaming preference categories into a binary outcome: "Likes" and "Dislikes." A contingency table was created to compare the distribution of gaming preferences across genders.
+
+We then performed a chi-square test to assess the statistical significance of the relationship between gender and gaming preference. This test evaluates whether the observed differences in preference between males and females could be attributed to chance.
+
+## Analysis
+```{r}
+# gaming preference binary
+video_data_like_cleaned$preference <- ifelse(video_data_like_cleaned$like %in% c(2, 3), "Likes", "Dislikes")
+
+# Creating a contingency table for gender and gaming preferences
+gender_vs_preference <- table(video_data_like_cleaned$sex, video_data_like_cleaned$preference)
+colnames(gender_vs_preference) <- c("Dislikes", "Likes")
+rownames(gender_vs_preference) <- c("Female", "Male")
+gender_vs_preference
+
+chi_square_test <- chisq.test(gender_vs_preference)
+chi_square_test
+```
+The results of the chi-square test indicated no statistically significant association between gender and gaming preference in this sample. Specifically, the test statistic (X-squared) was 1.7656 with 1 degree of freedom, and the resulting p-value was 0.1839, which is above the commonly used significance threshold of 0.05.
+
+Although there is a visual indication that more males reported a preference for gaming compared to females, this difference is not large enough to be deemed statistically significant. This suggests that, within this sample, any observed differences in gaming preferences between genders could be due to random variation.
+
+## Conclusion
+The advanced analysis provides an additional layer of understanding regarding the factors influencing gaming preferences. Despite the initial observation that males seemed more likely to prefer gaming, statistical testing did not support a significant gender-based difference. This finding highlights the complexity of gaming preferences and suggests that gender alone may not be a strong predictor of gaming interest in this context.
+
+# 4. Discussion and Conclusion
+The primary goal of this report was to explore the gaming habits, preferences, and academic expectations of students enrolled in statistics courses at UC Berkeley during Fall 1994. The study aimed to answer several key questions: how frequently students played video games in the week prior to the survey, how their reported gaming time aligned with self-reported gaming frequency, and whether their expectations for course grades matched the distribution used for grading. The analyses provided insights into the demographic and behavioral differences among students, including distinctions based on gender, work status, and computer ownership. Additionally, we explored the statistical significance of gender differences in gaming preferences.
+
+The findings suggest that a significant proportion of students played video games recently, though exam timing likely influenced the reported playtime. Gender, work status, and computer ownership were all associated with differences in gaming preferences, with males, those who work for pay, and computer owners generally reporting a greater interest in gaming. The analysis of expected grades revealed a tendency toward optimism, with more students expecting higher grades than what the target distribution suggested.
+
+The analysis underscored some interesting patterns in gaming preferences, particularly the relationship between demographics like gender and gaming behavior. However, the advanced analysis revealed that the observed gender differences were not statistically significant. This highlights the potential complexity of gaming preferences and suggests that other variables may play a role in shaping students' gaming habits. The timing of the survey during an exam week likely impacted the accuracy of reported gaming habits, as students may have adjusted their playtime to prioritize studying. Additionally, the sample size was relatively small.
+
+Future studies could benefit from a larger sample size and a more varied demographic to capture a broader spectrum of student gaming habits. Further research could also explore the impact of additional factors, such as social influences (friend group, fraternities, etc), on gaming preferences.
+
+This report provides a foundational understanding of the gaming behaviors of students in the mid-90s, offering interesting insights of what gaming was like at the time. As of today, gaming has become far more prevalent and widely accepted, so a similar study in the present day may yield far different results.
